@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#define MAX_ROWS 1000
+
+void build_matrix(const char *filename, int **matrix, int *rowSizes, int *rows){
+    FILE *file = fopen(filename, "r");
+    if (file == NULL){
+        printf("Error: Couldn't open file\n");
+    }
+
+    int *tempRow;
+    int value;
+    *rows = 0;
+
+    while (!feof(file)){
+        tempRow = malloc(MAX_ROWS * sizeof(int));
+        if (tempRow == NULL){
+            printf("Error: Memory failed\n"); 
+        }
+
+        int currentCol = 0;
+        while (fscanf(file, "%d", &value) == 1){
+            tempRow[currentCol++] = value;
+            if(fgetc(file) == '\n'){
+                break;
+            }
+        }
+
+        matrix[*rows] = malloc(currentCol * sizeof(int));
+        if (matrix[*rows] == NULL){
+            printf("Error: Memory failed\n");
+        }
+
+        for (int i = 0; i < currentCol; i++){
+            matrix[*rows][i] = tempRow[i];
+        }
+
+        rowSizes[*rows] = currentCol;
+        free(tempRow);
+        (*rows)++;
+
+    }
+
+    fclose(file);
+
+}
+
+
+int main(int argc, char **argv){
+//Read Input *********************************************************************
+    const char filename[] = "AOC2_input.txt";
+    int *matrix[MAX_ROWS];
+    int rowSizes[MAX_ROWS];
+    int rows = 0;
+    build_matrix(filename, matrix, rowSizes, &rows);
+//Copy above for input reading ***************************************************
+
+
+
+
+
+
+
+
+
+
+
+    return 0;
+}
